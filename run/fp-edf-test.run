@@ -30,4 +30,4 @@ build_boot_image { core init fp-edf-test }
 
 append qemu_args " -nographic "
 
-run_genode_until forever
+run_genode_until {child "fp-edf-test" exited with exit value .*\n} 40

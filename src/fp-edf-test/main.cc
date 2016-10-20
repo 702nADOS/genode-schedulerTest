@@ -43,11 +43,21 @@ static void test_cpu_session()
 	thread2.join();
 }
 
+static void create_thread_helper(char const* name, unsigned priority, unsigned deadline){
+	env()->cpu_session()->create_fp_edf_thread(10, name, 0, priority, deadline);
+}
+
 static void test_cpu_session_edf_fp()
 {
 
-	env()->cpu_session()->create_thread(10, "test", 0);
-	env()->cpu_session()->create_fp_edf_thread(10, "test2", 0, 1, 0);
+	create_thread_helper("test1", 2, 0);
+	create_thread_helper("test2", 3, 0);
+	//Create illegal thread
+	//create_thread_helper("test3", 2, 2);
+	//Create edf thread
+	create_thread_helper("test4", 0, 2);
+	create_thread_helper("test5", 0, 1);
+
 
 	/*
 	//Create fp_thread
