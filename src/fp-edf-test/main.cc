@@ -20,7 +20,6 @@ static void create_thread_helper(char const* name, unsigned priority, unsigned d
 
 static void test_cpu_session_edf_fp()
 {
-
 	Affinity::Space affinity_space = env()->cpu_session()->affinity_space();
 	printf("affinity space: %d\n", affinity_space.total());
 
@@ -30,29 +29,32 @@ static void test_cpu_session_edf_fp()
 	//Set EDF to core1
 	env()->cpu_session()->set_sched_type(1, EDF);
 
-
+	//Create FP-Threads on cpu0
 	create_thread_helper("test1", 2, 0, 0);
 	create_thread_helper("test2", 3, 0, 0);
-
-	//Create FP-Thread on CPU1
-	create_thread_helper("test10", 4, 0, 1);
-
-	//Create illegal thread
-	//create_thread_helper("test3", 2, 2);
-
-
-	//create_thread_helper("test5", 0, 2, 0);
 
 	//Create edf threads on cpu1
 	create_thread_helper("test6", 0, 4, 1);
 	create_thread_helper("test7", 0, 3, 1);
 	create_thread_helper("test8", 0, 2, 1);
 
-	//Create edf threads on cpu0
-	create_thread_helper("test4", 0, 1, 0);
+	try{
+		//Create edf threads on cpu0
+		create_thread_helper("test4", 0, 1, 0);
+	}
+	catch (Exception &ex){
+		printf("Catched exception, Thread creation failed\n");
+	}
 
-	//Create FP_thread on cpu1
-	create_thread_helper("test9", 50, 0, 1);
+
+	try{
+		//Create FP_thread on cpu1
+		create_thread_helper("test9", 50, 0, 1);
+	}
+	catch (Exception &ex){
+		printf("Catched exception, Thread creation failed\n");
+	}
+
 
 }
 
